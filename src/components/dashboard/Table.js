@@ -1,7 +1,7 @@
 import React from 'react';
 import TableItem from './TableItem';
 
-const Table = () => {
+const Table = props => {
 	return (
 		<div className='h-full overflow-y-scroll'>
 			{/* table header */}
@@ -24,28 +24,12 @@ const Table = () => {
 
 			<div className='w-full p-5'>
 				<div className='table w-full shadow'>
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
-					<TableItem />
+					{props.list.map(item => (
+						<TableItem item={item} />
+					))}
+					{props.list.map(item => (
+						<TableItem item={item} />
+					))}
 				</div>
 			</div>
 		</div>
