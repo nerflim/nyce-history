@@ -24,11 +24,11 @@ const Table = props => {
 
 			<div className='w-full p-5'>
 				<div className='table w-full shadow'>
-					{props.list.map(item => (
-						<TableItem item={item} />
+					{props.list.map((item, index) => (
+						<TableItem item={item} key={index} />
 					))}
-					{props.list.map(item => (
-						<TableItem item={item} />
+					{props.list.map((item, index) => (
+						<TableItem item={item} key={index} />
 					))}
 				</div>
 			</div>
