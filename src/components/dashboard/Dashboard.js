@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, Fragment } from 'react';
 import Header from './Header';
 import Table from './Table';
 import Pagination from './Pagination';
+import Loader from './Loader';
 
 const Dashboard = () => {
 	const list = [
@@ -67,15 +67,29 @@ const Dashboard = () => {
 			date: '02-08-2010'
 		}
 	];
+	const [isFetched, setIsFetched] = useState(false);
+
+	useEffect(() => {
+		setTimeout(() => {
+			setIsFetched(true);
+		}, 2000);
+	}, []);
+
 	return (
-		<div className='bg-gray-200 h-screen flex flex-col'>
-			<Header />
-			<Table list={list} />
-			<Pagination />
-			{/* <div>
-				<Link to='/'>go back</Link>
-			</div> */}
-		</div>
+		<Fragment>
+			{isFetched ? (
+				<div className='bg-gray-200 h-screen flex flex-col'>
+					<Header />
+					<Table list={list} />
+					<Pagination />
+					{/* <div>
+			<Link to='/'>go back</Link>
+		</div> */}
+				</div>
+			) : (
+				<Loader />
+			)}
+		</Fragment>
 	);
 };
 
