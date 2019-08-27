@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import BarLoader from 'react-spinners/BarLoader';
 
 const Loader = () => {
-	const [css, setCss] = useState(`display: block; margin: 0 auto;border-color: red;`);
+	const css = `display: block; margin: 0 auto;border-color: red;`;
 	return (
 		<div className='flex items-center justify-center bg-purple-800 text-white h-screen w-100'>
 			<div className='text-center'>

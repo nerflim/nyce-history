@@ -3,6 +3,7 @@ import Header from './Header';
 import Table from './Table';
 import Pagination from './Pagination';
 import Loader from './Loader';
+import axios from 'axios';
 
 const Dashboard = () => {
 	const list = [
@@ -67,12 +68,16 @@ const Dashboard = () => {
 			date: '02-08-2010'
 		}
 	];
+	const [items, setItems] = useState([]);
 	const [isFetched, setIsFetched] = useState(false);
 
 	useEffect(() => {
-		setTimeout(() => {
+		axios.get('https://jsonplaceholder.typicode.com/photos').then(res => {
+			setItems(res.data);
+
+			// stop loader and show table
 			setIsFetched(true);
-		}, 2000);
+		});
 	}, []);
 
 	return (
@@ -81,10 +86,7 @@ const Dashboard = () => {
 				<div className='bg-gray-200 h-screen flex flex-col'>
 					<Header />
 					<Table list={list} />
-					<Pagination />
-					{/* <div>
-			<Link to='/'>go back</Link>
-		</div> */}
+					<Pagination items={items} />
 				</div>
 			) : (
 				<Loader />
