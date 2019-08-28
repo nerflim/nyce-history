@@ -70,6 +70,25 @@ const Dashboard = () => {
 	];
 	const [items, setItems] = useState([]);
 	const [isFetched, setIsFetched] = useState(false);
+	const [active, setActive] = useState(1);
+	const itemsPerPage = 10;
+	const pageCount = items.length / itemsPerPage;
+
+	const prev = () => {
+		return active > 1 ? setActive(active - 1) : null;
+	};
+
+	const first = () => {
+		return setActive(1);
+	};
+
+	const next = () => {
+		return active < pageCount ? setActive(active + 1) : null;
+	};
+
+	const last = () => {
+		return setActive(pageCount);
+	};
 
 	useEffect(() => {
 		axios.get('https://jsonplaceholder.typicode.com/photos').then(res => {
@@ -80,13 +99,26 @@ const Dashboard = () => {
 		});
 	}, []);
 
+	const testPass = data => {
+		console.log(data);
+	};
+
 	return (
 		<Fragment>
 			{isFetched ? (
 				<div className='bg-gray-200 h-screen flex flex-col'>
 					<Header />
 					<Table list={list} />
-					<Pagination items={items} />
+					<Pagination
+						items={items}
+						pageCount={pageCount}
+						first={() => first()}
+						prev={() => prev()}
+						next={() => next()}
+						last={() => last()}
+						setActive={e => setActive(e)}
+						active={active}
+					/>
 				</div>
 			) : (
 				<Loader />
