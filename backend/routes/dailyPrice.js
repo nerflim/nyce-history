@@ -11,12 +11,12 @@ router.route('/').get((req, res) => {
 router.route('/').post((req, res) => {
 	const stock_symbol = req.body.stock_symbol;
 	const stock_exchange = req.body.stock_exchange;
-	const stock_price_open = Number(req.body.stock_price_open);
-	const stock_price_close = Number(req.body.stock_price_close);
-	const stock_price_low = Number(req.body.stock_price_low);
-	const stock_price_high = Number(req.body.stock_price_high);
-	const stock_price_adj_close = Number(req.body.stock_price_adj_close);
-	const stock_volume = Number(req.body.stock_volume);
+	const stock_price_open = parseFloat(req.body.stock_price_open);
+	const stock_price_close = parseFloat(req.body.stock_price_close);
+	const stock_price_low = parseFloat(req.body.stock_price_low);
+	const stock_price_high = parseFloat(req.body.stock_price_high);
+	const stock_price_adj_close = parseFloat(req.body.stock_price_adj_close);
+	const stock_volume = parseFloat(req.body.stock_volume);
 	const date = Date.parse(req.body.date);
 
 	const newPrice = new dailyPrice({
@@ -33,7 +33,7 @@ router.route('/').post((req, res) => {
 
 	newPrice
 		.save()
-		.then(() => res.json('res'))
+		.then(() => res.json(newPrice))
 		.catch(err => res.status(400).json('Error: ' + err));
 });
 
