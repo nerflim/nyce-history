@@ -13,26 +13,16 @@ router.route('/').get((req, res) => {
 // adds a price
 
 router.route('/').post((req, res) => {
-	const stock_symbol = req.body.stock_symbol;
-	const stock_exchange = req.body.stock_exchange;
-	const stock_price_open = parseFloat(req.body.stock_price_open);
-	const stock_price_close = parseFloat(req.body.stock_price_close);
-	const stock_price_low = parseFloat(req.body.stock_price_low);
-	const stock_price_high = parseFloat(req.body.stock_price_high);
-	const stock_price_adj_close = parseFloat(req.body.stock_price_adj_close);
-	const stock_volume = parseFloat(req.body.stock_volume);
-	const date = Date.parse(req.body.date);
-
 	const newPrice = new dailyPrice({
-		stock_symbol,
-		stock_exchange,
-		stock_price_open,
-		stock_price_close,
-		stock_price_low,
-		stock_price_high,
-		stock_price_adj_close,
-		stock_volume,
-		date
+		stock_symbol: req.body.stock_symbol,
+		stock_exchange: req.body.stock_exchange,
+		stock_price_open: parseFloat(req.body.stock_price_open),
+		stock_price_close: parseFloat(req.body.stock_price_close),
+		stock_price_low: parseFloat(req.body.stock_price_low),
+		stock_price_high: parseFloat(req.body.stock_price_high),
+		stock_price_adj_close: parseFloat(req.body.stock_price_adj_close),
+		stock_volume: parseFloat(req.body.stock_volume),
+		date: Date.parse(req.body.date)
 	});
 
 	newPrice
