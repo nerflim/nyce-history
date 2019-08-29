@@ -4,6 +4,7 @@ import Table from './Table';
 import Pagination from './Pagination';
 import Loader from './Loader';
 import axios from 'axios';
+import Offline from './Offline';
 
 const Dashboard = () => {
 	const list = [
@@ -107,6 +108,7 @@ const Dashboard = () => {
 		<Fragment>
 			{isFetched ? (
 				<div className='bg-gray-200 h-screen flex flex-col'>
+					{/* <Offline /> */}
 					<Header />
 					<Table list={list} />
 					<Pagination
