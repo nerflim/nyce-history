@@ -21,12 +21,14 @@ function createWindow() {
 	win.focus();
 }
 
+// gets all the daily price
 ipcMain.on('get', (e, arg) => {
 	price.get().then(res => {
 		e.reply('get', res.map(item => parsePrice(item)));
 	});
 });
 
+// parse the price data to display on client side
 function parsePrice(price) {
 	return {
 		...price,

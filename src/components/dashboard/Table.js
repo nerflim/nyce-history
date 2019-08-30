@@ -25,7 +25,7 @@ const Table = props => {
 			<div className='w-full p-5'>
 				<div className='table w-full shadow'>
 					{props.prices.map((item, index) => (
-						<TableItem item={item} key={index} />
+						<TableItem item={item} key={index} edit={() => props.edit(item)} active={props.active} />
 					))}
 				</div>
 			</div>
