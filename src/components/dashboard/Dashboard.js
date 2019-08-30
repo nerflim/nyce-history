@@ -3,7 +3,6 @@ import Header from './Header';
 import Table from './Table';
 import Pagination from './Pagination';
 import Loader from './Loader';
-import axios from 'axios';
 import Offline from './Offline';
 const { ipcRenderer } = window.require('electron');
 
@@ -70,6 +69,7 @@ const Dashboard = () => {
 			date: '02-08-2010'
 		}
 	];
+	const [prices, setPrices] = useState([]);
 	const [items, setItems] = useState([]);
 	const [isFetched, setIsFetched] = useState(false);
 	const [active, setActive] = useState(1);
@@ -93,25 +93,15 @@ const Dashboard = () => {
 	};
 
 	useEffect(() => {
-		ipcRenderer.send('fetchData', null);
+		// fetch table data
+		ipcRenderer.send('get', null);
 	}, []);
 
-	ipcRenderer.on('dataFetched', (event, arg) => {
-		console.log(arg);
+	// returns table data
+	ipcRenderer.on('get', (event, arg) => {
+		setPrices(arg);
+		setIsFetched(true);
 	});
-
-	useEffect(() => {
-		axios.get('https://jsonplaceholder.typicode.com/photos').then(res => {
-			setItems(res.data);
-
-			// stop loader and show table
-			setIsFetched(true);
-		});
-	}, []);
-
-	const testPass = data => {
-		console.log(data);
-	};
 
 	return (
 		<Fragment>
@@ -119,7 +109,7 @@ const Dashboard = () => {
 				<div className='bg-gray-200 h-screen flex flex-col'>
 					{/* <Offline /> */}
 					<Header />
-					<Table list={list} />
+					<Table prices={prices} />
 					<Pagination
 						items={items}
 						pageCount={pageCount}

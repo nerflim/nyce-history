@@ -21,11 +21,26 @@ function createWindow() {
 	win.focus();
 }
 
-ipcMain.on('fetchData', (e, arg) => {
-	console.log('fetching data');
+ipcMain.on('get', (e, arg) => {
 	price.get().then(res => {
-		e.reply('dataFetched', res);
+		e.reply('get', res.map(item => parsePrice(item)));
 	});
 });
+
+function parsePrice(price) {
+	return {
+		...price,
+		_id: price._id.toString(),
+		stock_symbol: price.stock_symbol.toString(),
+		stock_exchange: price.stock_exchange.toString(),
+		stock_price_open: parseFloat(price.stock_price_open),
+		stock_price_close: parseFloat(price.stock_price_close),
+		stock_price_low: parseFloat(price.stock_price_low),
+		stock_price_high: parseFloat(price.stock_price_high),
+		stock_price_adj_close: parseFloat(price.stock_price_adj_close),
+		stock_volume: parseFloat(price.stock_volume),
+		date: Date.parse(price.date)
+	};
+}
 
 app.on('ready', createWindow);

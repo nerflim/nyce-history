@@ -24,10 +24,7 @@ const Table = props => {
 
 			<div className='w-full p-5'>
 				<div className='table w-full shadow'>
-					{props.list.map((item, index) => (
-						<TableItem item={item} key={index} />
-					))}
-					{props.list.map((item, index) => (
+					{props.prices.map((item, index) => (
 						<TableItem item={item} key={index} />
 					))}
 				</div>
