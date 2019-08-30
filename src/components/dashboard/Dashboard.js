@@ -5,6 +5,7 @@ import Pagination from './Pagination';
 import Loader from './Loader';
 import axios from 'axios';
 import Offline from './Offline';
+const { ipcRenderer } = window.require('electron');
 
 const Dashboard = () => {
 	const list = [
@@ -90,6 +91,14 @@ const Dashboard = () => {
 	const last = () => {
 		return setActive(pageCount);
 	};
+
+	useEffect(() => {
+		ipcRenderer.send('fetchData', null);
+	}, []);
+
+	ipcRenderer.on('dataFetched', (event, arg) => {
+		console.log(arg);
+	});
 
 	useEffect(() => {
 		axios.get('https://jsonplaceholder.typicode.com/photos').then(res => {

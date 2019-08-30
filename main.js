@@ -1,4 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
+const db = require('./controllers/connectDb');
+const price = require('./controllers/price.controller');
 
 function createWindow() {
 	// Create the browser window.
@@ -12,14 +14,18 @@ function createWindow() {
 		}
 	});
 
-	// testing communication between electron and react
-	ipcMain.on('test', (e, arg) => {
-		console.log(arg);
-	});
+	db.connect();
 
 	// and load the index.html of the app.
 	win.loadURL('http://localhost:3000/');
 	win.focus();
 }
+
+ipcMain.on('fetchData', (e, arg) => {
+	console.log('fetching data');
+	price.get().then(res => {
+		e.reply('dataFetched', res);
+	});
+});
 
 app.on('ready', createWindow);
