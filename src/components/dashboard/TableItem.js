@@ -4,6 +4,7 @@ import moment from 'moment';
 const TableItem = props => {
 	const active = 'table-row bg-purple-300 text-xs hover:bg-purple-100';
 	const rowClass = 'table-row bg-white text-xs hover:bg-purple-100';
+
 	return (
 		<div className={props.active === props.item._id ? active : rowClass}>
 			<div className='table-cell p-2 border-r w-1/12'>{props.item.stock_symbol}</div>

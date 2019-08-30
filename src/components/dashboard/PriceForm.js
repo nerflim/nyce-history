@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
+const { ipcRenderer } = window.require('electron');
 
 const PriceForm = props => {
 	const [price, setPrice] = useState(() => {
@@ -29,10 +30,34 @@ const PriceForm = props => {
 		};
 	});
 
+	// handles the add
+	const addHandler = () => {
+		return new Promise((resolve, reject) => {
+			ipcRenderer.send('store', price);
+			ipcRenderer.on('store', (event, arg) => {
+				resolve(console.log(arg));
+			});
+		});
+	};
+
+	// handles the edit
+	const editHandler = () => {
+		return new Promise((resolve, reject) => {
+			ipcRenderer.send('update', price);
+			ipcRenderer.on('update', (event, arg) => {
+				resolve(console.log(arg));
+			});
+		});
+	};
+
 	const submitHandler = e => {
 		e.preventDefault();
 		console.log(price);
-		props.close();
+		if (props.type === 'add') {
+			addHandler().then(() => props.close());
+		} else {
+			editHandler().then(() => props.close());
+		}
 	};
 	return (
 		<React.Fragment>

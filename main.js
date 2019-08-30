@@ -28,6 +28,20 @@ ipcMain.on('get', (e, arg) => {
 	});
 });
 
+ipcMain.on('store', (e, arg) => {
+	console.log(arg);
+	setTimeout(() => {
+		e.reply('store', 'received store');
+	}, 2000);
+});
+
+ipcMain.on('update', (e, arg) => {
+	console.log(arg);
+	setTimeout(() => {
+		e.reply('update', 'received update');
+	}, 1000);
+});
+
 // parse the price data to display on client side
 function parsePrice(price) {
 	return {
