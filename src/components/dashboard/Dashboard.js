@@ -43,6 +43,15 @@ const Dashboard = () => {
 		setActive({});
 	};
 
+	// updates the edited price
+	const editPrice = data => {
+		const pricesCopy = [...prices];
+
+		prices.map((item, index) => (item._id === data._id ? (pricesCopy[index] = data) : null));
+
+		setPrices([...pricesCopy]);
+	};
+
 	useEffect(() => {
 		// fetch table data
 		fetchData().then(res => {
@@ -51,6 +60,7 @@ const Dashboard = () => {
 		});
 	}, []);
 
+	// calls server to get all the daily NYSE prices
 	const fetchData = () => {
 		return new Promise((resolve, reject) => {
 			ipcRenderer.send('get', null);
@@ -67,7 +77,13 @@ const Dashboard = () => {
 					{/* <Offline /> */}
 
 					{priceType !== '' ? (
-						<PriceForm close={() => closeHandler()} type={priceType} price={active} addPrice={data => setPrices([...prices, data])} />
+						<PriceForm
+							close={() => closeHandler()}
+							type={priceType}
+							price={active}
+							addPrice={data => setPrices([...prices, data])}
+							editPrice={data => editPrice(data)}
+						/>
 					) : null}
 
 					<Header add={() => setPriceType('add')} />

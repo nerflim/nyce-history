@@ -37,10 +37,9 @@ ipcMain.on('store', (e, arg) => {
 
 // updates the price
 ipcMain.on('update', (e, arg) => {
-	console.log(arg);
-	setTimeout(() => {
-		e.reply('update', 'received update');
-	}, 1000);
+	price.update(arg).then(res => {
+		e.reply('update', parsePrice(res));
+	});
 });
 
 // parse the price data to display on client side

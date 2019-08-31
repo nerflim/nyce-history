@@ -32,7 +32,25 @@ function store(req) {
 }
 
 function update(req) {
-	return 'update';
+	return dailyPrice
+		.findById(req._id)
+		.then(price => {
+			price.stock_symbol = req.stock_symbol;
+			price.stock_exchange = req.stock_exchange;
+			price.stock_price_open = parseFloat(req.stock_price_open);
+			price.stock_price_close = parseFloat(req.stock_price_close);
+			price.stock_price_low = parseFloat(req.stock_price_low);
+			price.stock_price_high = parseFloat(req.stock_price_high);
+			price.stock_price_adj_close = parseFloat(req.stock_price_adj_close);
+			price.stock_volume = parseFloat(req.stock_volume);
+			price.date = Date.parse(req.date);
+
+			return price
+				.save()
+				.then(() => price)
+				.catch(err => 'Error: ' + err);
+		})
+		.catch(err => 'Error: ' + err);
 }
 
 function destroy(req) {
