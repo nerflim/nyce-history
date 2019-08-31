@@ -33,11 +33,13 @@ const Dashboard = () => {
 		return setActivePage(pageCount);
 	};
 
+	// opens the form and edits the active price
 	const activeHandler = price => {
 		setActive(price);
 		setPriceType('edit');
 	};
 
+	// closes the form
 	const closeHandler = () => {
 		setPriceType('');
 		setActive({});
@@ -50,6 +52,10 @@ const Dashboard = () => {
 		prices.map((item, index) => (item._id === data._id ? (pricesCopy[index] = data) : null));
 
 		setPrices([...pricesCopy]);
+	};
+
+	const removePrice = data => {
+		setPrices(prices.filter(price => price._id !== data));
 	};
 
 	useEffect(() => {
@@ -83,6 +89,7 @@ const Dashboard = () => {
 							price={active}
 							addPrice={data => setPrices([...prices, data])}
 							editPrice={data => editPrice(data)}
+							removePrice={data => removePrice(data)}
 						/>
 					) : null}
 

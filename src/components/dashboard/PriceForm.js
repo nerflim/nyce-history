@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 const { ipcRenderer } = window.require('electron');
 
 const PriceForm = props => {
+	const [isRemove, setIsRemove] = useState(false);
 	const [price, setPrice] = useState(() => {
 		if (props.type === 'edit') {
 			return {
@@ -50,6 +51,18 @@ const PriceForm = props => {
 		});
 	};
 
+	const removeHandler = () => {
+		new Promise((resolve, reject) => {
+			ipcRenderer.send('destroy', props.price._id);
+			ipcRenderer.on('destroy', (event, arg) => {
+				resolve(arg);
+			});
+		}).then(res => {
+			props.removePrice(res);
+			props.close();
+		});
+	};
+
 	const submitHandler = e => {
 		e.preventDefault();
 		console.log(price);
@@ -67,6 +80,20 @@ const PriceForm = props => {
 			});
 		}
 	};
+
+	// disables submit button to prevent submitting the form when the required fields are empty
+	const disabledSubmit =
+		price.stock_symbol === '' ||
+		price.stock_price_high === '' ||
+		price.stock_price_low === '' ||
+		price.stock_price_open === '' ||
+		price.stock_price_close === '' ||
+		price.stock_price_adj_close === '' ||
+		price.stock_volume === '' ||
+		price.date === ''
+			? true
+			: false;
+
 	return (
 		<React.Fragment>
 			<div className='bg-black absolute w-full z-10 opacity-75 h-full' />
@@ -78,101 +105,129 @@ const PriceForm = props => {
 							<FontAwesomeIcon icon={faTimes} />
 						</button>
 					</div>
-					<form className='w-full' onSubmit={e => submitHandler(e)}>
-						<div className='flex flex-row mb-4'>
-							<div className='w-4/12 mx-2'>
-								<label className='block mb-2 text-sm text-gray-600'>Symbol</label>
-								<input
-									type='text'
-									className='border border-gray-400 rounded w-full py-2 px-3'
-									placeholder='Symbol'
-									value={price.stock_symbol}
-									onChange={e => setPrice({ ...price, stock_symbol: e.target.value })}
-								/>
+					{!isRemove ? (
+						<form className='w-full' onSubmit={e => submitHandler(e)}>
+							<div className='flex flex-row mb-4'>
+								<div className='w-4/12 mx-2'>
+									<label className='block mb-2 text-sm text-gray-600'>Symbol</label>
+									<input
+										type='text'
+										className='border border-gray-400 rounded w-full py-2 px-3'
+										placeholder='Symbol'
+										value={price.stock_symbol}
+										onChange={e => setPrice({ ...price, stock_symbol: e.target.value })}
+										required
+									/>
+								</div>
+								<div className='w-4/12 mx-2'>
+									<label className='block mb-2 text-sm text-gray-600'>Price High</label>
+									<input
+										type='number'
+										className='border border-gray-400 rounded w-full py-2 px-3'
+										placeholder='Price High'
+										value={price.stock_price_high}
+										onChange={e => setPrice({ ...price, stock_price_high: e.target.value })}
+										required
+									/>
+								</div>
+								<div className='w-4/12 mx-2'>
+									<label className='block mb-2 text-sm text-gray-600'>Price Low</label>
+									<input
+										type='number'
+										className='border border-gray-400 rounded w-full py-2 px-3'
+										placeholder='Price Low'
+										value={price.stock_price_low}
+										onChange={e => setPrice({ ...price, stock_price_low: e.target.value })}
+										required
+									/>
+								</div>
 							</div>
-							<div className='w-4/12 mx-2'>
-								<label className='block mb-2 text-sm text-gray-600'>Price High</label>
-								<input
-									type='number'
-									className='border border-gray-400 rounded w-full py-2 px-3'
-									placeholder='Price High'
-									value={price.stock_price_high}
-									onChange={e => setPrice({ ...price, stock_price_high: e.target.value })}
-								/>
+							<div className='flex flex-row mb-4'>
+								<div className='w-4/12 mx-2'>
+									<label className='block mb-2 text-sm text-gray-600'>Price Open</label>
+									<input
+										type='number'
+										className='border border-gray-400 rounded w-full py-2 px-3'
+										placeholder='Price Open'
+										value={price.stock_price_open}
+										onChange={e => setPrice({ ...price, stock_price_open: e.target.value })}
+										required
+									/>
+								</div>
+								<div className='w-4/12 mx-2'>
+									<label className='block mb-2 text-sm text-gray-600'>Price Close</label>
+									<input
+										type='number'
+										className='border border-gray-400 rounded w-full py-2 px-3'
+										placeholder='Price Close'
+										value={price.stock_price_close}
+										onChange={e => setPrice({ ...price, stock_price_close: e.target.value })}
+										required
+									/>
+								</div>
+								<div className='w-4/12 mx-2'>
+									<label className='block mb-2 text-sm text-gray-600'>Price Adj Close</label>
+									<input
+										type='number'
+										className='border border-gray-400 rounded w-full py-2 px-3'
+										placeholder='Price Adj Close'
+										value={price.stock_price_adj_close}
+										onChange={e => setPrice({ ...price, stock_price_adj_close: e.target.value })}
+										required
+									/>
+								</div>
 							</div>
-							<div className='w-4/12 mx-2'>
-								<label className='block mb-2 text-sm text-gray-600'>Price Low</label>
-								<input
-									type='number'
-									className='border border-gray-400 rounded w-full py-2 px-3'
-									placeholder='Price Low'
-									value={price.stock_price_low}
-									onChange={e => setPrice({ ...price, stock_price_low: e.target.value })}
-								/>
+							<div className='flex flex-row mb-4'>
+								<div className='w-4/12 mx-2'>
+									<label className='block mb-2 text-sm text-gray-600'>Volume</label>
+									<input
+										type='number'
+										className='border border-gray-400 rounded w-full py-2 px-3'
+										placeholder='Volume'
+										value={price.stock_volume}
+										onChange={e => setPrice({ ...price, stock_volume: e.target.value })}
+										required
+									/>
+								</div>
+								<div className='w-4/12 mx-2'>
+									<label className='block mb-2 text-sm text-gray-600'>Date</label>
+									<input
+										type='date'
+										className='border border-gray-400 rounded w-full py-2 px-3'
+										placeholder='Date'
+										value={price.date}
+										onChange={e => setPrice({ ...price, date: e.target.value })}
+										required
+									/>
+								</div>
+								<div className='w-4/12 mx-2' />
 							</div>
-						</div>
-						<div className='flex flex-row mb-4'>
-							<div className='w-4/12 mx-2'>
-								<label className='block mb-2 text-sm text-gray-600'>Price Open</label>
-								<input
-									type='number'
-									className='border border-gray-400 rounded w-full py-2 px-3'
-									placeholder='Price Open'
-									value={price.stock_price_open}
-									onChange={e => setPrice({ ...price, stock_price_open: e.target.value })}
-								/>
-							</div>
-							<div className='w-4/12 mx-2'>
-								<label className='block mb-2 text-sm text-gray-600'>Price Close</label>
-								<input
-									type='number'
-									className='border border-gray-400 rounded w-full py-2 px-3'
-									placeholder='Price Close'
-									value={price.stock_price_close}
-									onChange={e => setPrice({ ...price, stock_price_close: e.target.value })}
-								/>
-							</div>
-							<div className='w-4/12 mx-2'>
-								<label className='block mb-2 text-sm text-gray-600'>Price Adj Close</label>
-								<input
-									type='number'
-									className='border border-gray-400 rounded w-full py-2 px-3'
-									placeholder='Price Adj Close'
-									value={price.stock_price_adj_close}
-									onChange={e => setPrice({ ...price, stock_price_adj_close: e.target.value })}
-								/>
-							</div>
-						</div>
-						<div className='flex flex-row mb-4'>
-							<div className='w-4/12 mx-2'>
-								<label className='block mb-2 text-sm text-gray-600'>Volume</label>
-								<input
-									type='number'
-									className='border border-gray-400 rounded w-full py-2 px-3'
-									placeholder='Volume'
-									value={price.stock_volume}
-									onChange={e => setPrice({ ...price, stock_volume: e.target.value })}
-								/>
-							</div>
-							<div className='w-4/12 mx-2'>
-								<label className='block mb-2 text-sm text-gray-600'>Date</label>
-								<input
-									type='date'
-									className='border border-gray-400 rounded w-full py-2 px-3'
-									placeholder='Date'
-									value={price.date}
-									onChange={e => setPrice({ ...price, date: e.target.value })}
-								/>
-							</div>
-							<div className='w-4/12 mx-2' />
-						</div>
 
-						<div className='flex text-gray-700 border-t pt-2 px-2'>
-							<button type='submit' className='ml-auto bg-purple-700 text-white p-2 rounded'>
-								Submit
+							<div className='flex items-center text-gray-700 border-t pt-2 px-2'>
+								{props.type === 'edit' ? (
+									<button type='button' className='bg-transparent text-red-700 p-0 m-0 text-sm' onClick={() => setIsRemove(!isRemove)}>
+										<FontAwesomeIcon icon={faTrashAlt} size='sm' /> Remove Price
+									</button>
+								) : null}
+								<button
+									type='submit'
+									className={`ml-auto bg-purple-700 text-white p-2 rounded ${disabledSubmit ? `opacity-50 cursor-not-allowed` : ''}`}
+									disabled={disabledSubmit}>
+									Submit
+								</button>
+							</div>
+						</form>
+					) : (
+						<div className='text-center text-red-700 py-8'>
+							<h1 className='text-xl'>Are you sure you want to remove this price?</h1>
+							<button type='button' className='m-3 bg-gray-700 text-white rounded p-2' onClick={() => setIsRemove(!isRemove)}>
+								Cancel
+							</button>
+							<button type='button' className='m-3 bg-red-700 text-white rounded p-2' onClick={() => removeHandler()}>
+								Confirm
 							</button>
 						</div>
-					</form>
+					)}
 				</div>
 			</div>
 		</React.Fragment>

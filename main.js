@@ -42,6 +42,13 @@ ipcMain.on('update', (e, arg) => {
 	});
 });
 
+// destroy / delete / remove the price
+ipcMain.on('destroy', (e, arg) => {
+	price.destroy(arg).then(res => {
+		e.reply('destroy', res);
+	});
+});
+
 // parse the price data to display on client side
 function parsePrice(price) {
 	return {

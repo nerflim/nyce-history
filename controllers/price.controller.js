@@ -5,7 +5,7 @@ function get() {
 		.find()
 		.lean()
 		.then(prices => prices)
-		.catch(err => 'Error: ' + err);
+		.catch(err => console.log('Error: ' + err));
 }
 
 function show(req) {
@@ -28,7 +28,7 @@ function store(req) {
 	return newPrice
 		.save()
 		.then(() => newPrice)
-		.catch(err => 'Error: ' + err);
+		.catch(err => console.log('Error: ' + err));
 }
 
 function update(req) {
@@ -48,13 +48,16 @@ function update(req) {
 			return price
 				.save()
 				.then(() => price)
-				.catch(err => 'Error: ' + err);
+				.catch(err => console.log('Error: ' + err));
 		})
-		.catch(err => 'Error: ' + err);
+		.catch(err => console.log('Error: ' + err));
 }
 
 function destroy(req) {
-	return 'destroy';
+	return dailyPrice
+		.findByIdAndDelete(req)
+		.then(() => req)
+		.catch(err => console.log('Error: ' + err));
 }
 
-module.exports = { get, show, store, update };
+module.exports = { get, show, store, update, destroy };
