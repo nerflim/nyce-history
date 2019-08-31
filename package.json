@@ -1,5 +1,6 @@
 {
 	"name": "nyce-history",
+	"homepage": ".",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
@@ -12,7 +13,6 @@
 		"mongoose": "^5.6.11",
 		"react": "^16.9.0",
 		"react-dom": "^16.9.0",
-		"react-router-dom": "^5.0.1",
 		"react-scripts": "3.1.1",
 		"react-spinners": "^0.6.1",
 		"tailwindcss": "^1.1.2"

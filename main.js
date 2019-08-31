@@ -3,6 +3,8 @@ const db = require('./controllers/connectDb');
 const price = require('./controllers/price.controller');
 
 function createWindow() {
+	const isDev = true;
+
 	// Create the browser window.
 	let win = new BrowserWindow({
 		width: 1024,
@@ -14,10 +16,12 @@ function createWindow() {
 		}
 	});
 
+	// connect to database
 	db.connect();
 
-	// and load the index.html of the app.
-	win.loadURL('http://localhost:3000/');
+	// load the index.html of the app.
+	console.log(__dirname);
+	isDev ? win.loadURL('http://localhost:3000/') : win.loadFile('./build/index.html');
 	win.focus();
 }
 

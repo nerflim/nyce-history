@@ -21,11 +21,15 @@ const Table = props => {
 		} else if (orderBy !== 'stock_symbol' && order) {
 			// return ascending
 			return parseFloat(a[orderBy]) - parseFloat(b[orderBy]);
-		} else if (orderBy === 'stock_symbol' && !order && a.stock_symbol > b.stock_symbol) {
+		}
+		// return descending
+		else if (orderBy === 'stock_symbol' && !order && a.stock_symbol > b.stock_symbol) {
 			return -1;
 		} else if (orderBy === 'stock_symbol' && !order && a.stock_symbol < b.stock_symbol) {
 			return 1;
-		} else if (orderBy === 'stock_symbol' && order && a.stock_symbol > b.stock_symbol) {
+		}
+		//return ascending
+		else if (orderBy === 'stock_symbol' && order && a.stock_symbol > b.stock_symbol) {
 			return 1;
 		} else if (orderBy === 'stock_symbol' && order && a.stock_symbol < b.stock_symbol) {
 			return -1;
