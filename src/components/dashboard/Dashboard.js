@@ -11,6 +11,7 @@ const Dashboard = () => {
 	const [prices, setPrices] = useState([]);
 	const [priceType, setPriceType] = useState('');
 	const [active, setActive] = useState({});
+
 	const [items, setItems] = useState([]);
 	const [isFetched, setIsFetched] = useState(false);
 	const [activePage, setActivePage] = useState(1);
