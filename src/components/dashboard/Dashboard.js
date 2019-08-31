@@ -45,21 +45,31 @@ const Dashboard = () => {
 
 	useEffect(() => {
 		// fetch table data
-		ipcRenderer.send('get', null);
+		fetchData().then(res => {
+			setPrices(res);
+			setIsFetched(true);
+		});
 	}, []);
 
-	// returns table data
-	ipcRenderer.on('get', (event, arg) => {
-		setPrices(arg);
-		setIsFetched(true);
-	});
+	const fetchData = () => {
+		return new Promise((resolve, reject) => {
+			ipcRenderer.send('get', null);
+			ipcRenderer.on('get', (event, arg) => {
+				resolve(arg);
+			});
+		});
+	};
 
 	return (
 		<Fragment>
 			{isFetched ? (
 				<div className='bg-gray-200 h-screen flex flex-col'>
 					{/* <Offline /> */}
-					{priceType !== '' ? <PriceForm close={() => closeHandler()} type={priceType} price={active} /> : null}
+
+					{priceType !== '' ? (
+						<PriceForm close={() => closeHandler()} type={priceType} price={active} addPrice={data => setPrices([...prices, data])} />
+					) : null}
+
 					<Header add={() => setPriceType('add')} />
 					<Table prices={prices} edit={price => activeHandler(price)} active={active._id} />
 					<Pagination

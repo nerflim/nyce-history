@@ -13,7 +13,22 @@ function show(req) {
 }
 
 function store(req) {
-	return 'store';
+	const newPrice = new dailyPrice({
+		stock_symbol: req.stock_symbol,
+		stock_exchange: 'NYSE',
+		stock_price_open: parseFloat(req.stock_price_open),
+		stock_price_close: parseFloat(req.stock_price_close),
+		stock_price_low: parseFloat(req.stock_price_low),
+		stock_price_high: parseFloat(req.stock_price_high),
+		stock_price_adj_close: parseFloat(req.stock_price_adj_close),
+		stock_volume: parseFloat(req.stock_volume),
+		date: Date.parse(req.date)
+	});
+
+	return newPrice
+		.save()
+		.then(() => newPrice)
+		.catch(err => 'Error: ' + err);
 }
 
 function update(req) {

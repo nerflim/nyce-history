@@ -28,13 +28,14 @@ ipcMain.on('get', (e, arg) => {
 	});
 });
 
+// adds a new price
 ipcMain.on('store', (e, arg) => {
-	console.log(arg);
-	setTimeout(() => {
-		e.reply('store', 'received store');
-	}, 2000);
+	price.store(arg).then(res => {
+		e.reply('store', parsePrice(res));
+	});
 });
 
+// updates the price
 ipcMain.on('update', (e, arg) => {
 	console.log(arg);
 	setTimeout(() => {

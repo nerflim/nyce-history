@@ -35,7 +35,7 @@ const PriceForm = props => {
 		return new Promise((resolve, reject) => {
 			ipcRenderer.send('store', price);
 			ipcRenderer.on('store', (event, arg) => {
-				resolve(console.log(arg));
+				resolve(arg);
 			});
 		});
 	};
@@ -43,7 +43,7 @@ const PriceForm = props => {
 	// handles the edit
 	const editHandler = () => {
 		return new Promise((resolve, reject) => {
-			ipcRenderer.send('update', price);
+			ipcRenderer.send('update', { _id: props.price._id, ...price });
 			ipcRenderer.on('update', (event, arg) => {
 				resolve(console.log(arg));
 			});
@@ -54,7 +54,10 @@ const PriceForm = props => {
 		e.preventDefault();
 		console.log(price);
 		if (props.type === 'add') {
-			addHandler().then(() => props.close());
+			addHandler().then(res => {
+				props.addPrice(res);
+				props.close();
+			});
 		} else {
 			editHandler().then(() => props.close());
 		}
