@@ -4,6 +4,7 @@ function get() {
 	return dailyPrice
 		.find()
 		.lean()
+		.sort({ date: 'desc' })
 		.then(prices => prices)
 		.catch(err => console.log('Error: ' + err));
 }

@@ -87,7 +87,7 @@ const Dashboard = () => {
 							close={() => closeHandler()}
 							type={priceType}
 							price={active}
-							addPrice={data => setPrices([...prices, data])}
+							addPrice={data => setPrices([data, ...prices])}
 							editPrice={data => editPrice(data)}
 							removePrice={data => removePrice(data)}
 						/>
