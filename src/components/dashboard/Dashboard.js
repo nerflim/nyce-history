@@ -12,6 +12,7 @@ const Dashboard = () => {
 	const [priceType, setPriceType] = useState('');
 	const [active, setActive] = useState({});
 	const [onlineStatus, setOnlineStatus] = useState(navigator.onLine);
+	const [offlinePrices, setOfflinePrices] = useState([]);
 
 	const [items, setItems] = useState([]);
 	const [isFetched, setIsFetched] = useState(false);
@@ -62,23 +63,11 @@ const Dashboard = () => {
 
 	// only runs once
 	useEffect(() => {
-		// fetch table data
-		fetchData().then(res => {
-			setPrices(res);
-			setIsFetched(true);
-		});
-	}, []);
-
-	// everytime the prices are changed, the stored prices file will also update
-	useEffect(() => {
-		storePrices();
-	}, [prices]);
-
-	useEffect(() => {
 		// event listener to check if there is internet connection
 		window.addEventListener('online', checkOnlineStatus);
 		window.addEventListener('offline', checkOnlineStatus);
 
+		// call event function
 		checkOnlineStatus();
 
 		// remove event listeners to avoid memory leak
@@ -86,7 +75,16 @@ const Dashboard = () => {
 			window.removeEventListener('online', checkOnlineStatus);
 			window.removeEventListener('offline', checkOnlineStatus);
 		};
-	});
+	}, []);
+
+	// everytime the prices are changed, the stored prices file will also update
+	useEffect(() => {
+		if (prices.length) {
+			storePrices().then(res => {
+				setOfflinePrices(res);
+			});
+		}
+	}, [prices]);
 
 	// calls server to get all the daily NYSE prices
 	const fetchData = () => {
@@ -108,8 +106,37 @@ const Dashboard = () => {
 		});
 	};
 
+	// calls the server to get the daily prices file
+	const getStoredPrices = () => {
+		return new Promise((resolve, reject) => {
+			ipcRenderer.send('get_store_prices', null);
+			ipcRenderer.on('get_store_prices', (e, arg) => {
+				resolve(arg);
+			});
+		});
+	};
+
 	const checkOnlineStatus = () => {
-		setOnlineStatus(navigator.onLine);
+		// check if online
+		// if online → fetch daily prices from the database
+		if (navigator.onLine) {
+			fetchData().then(res => {
+				console.log('using the DB');
+				setPrices(res);
+				setIsFetched(true);
+				setOnlineStatus(navigator.onLine);
+			});
+		}
+		// if offline, get the stored daily prices
+		else {
+			getStoredPrices().then(res => {
+				console.log('Using the local stored daily prices');
+				setPrices(res);
+				setIsFetched(true);
+				setOnlineStatus(navigator.onLine);
+			});
+		}
+
 		return !navigator.onLine ? setPriceType('') : null;
 	};
 
@@ -131,7 +158,7 @@ const Dashboard = () => {
 					) : null}
 
 					<Header add={() => setPriceType('add')} online={onlineStatus} />
-					<Table prices={prices} edit={price => activeHandler(price)} active={active._id} online={onlineStatus} />
+					<Table prices={onlineStatus ? prices : offlinePrices} edit={price => activeHandler(price)} active={active._id} online={onlineStatus} />
 					<Pagination
 						items={items}
 						pageCount={pageCount}

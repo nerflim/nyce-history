@@ -77,7 +77,6 @@ const PriceForm = props => {
 
 	const submitHandler = e => {
 		e.preventDefault();
-		console.log(price);
 		if (props.type === 'add') {
 			// call add handler
 			addHandler().then(res => {

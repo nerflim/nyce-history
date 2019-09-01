@@ -55,10 +55,21 @@ ipcMain.on('destroy', (e, arg) => {
 
 // stores the daily prices to a file
 ipcMain.on('store_prices', (e, arg) => {
-	fs.writeFile('dailyPrices.json', JSON.stringify(arg.map(item => parsePrice(item))), err => {
+	fs.writeFile('dailyPrices.json', JSON.stringify(arg), err => {
 		if (err) throw err;
+		fs.readFile('dailyPrices.json', 'utf8', (err2, data) => {
+			if (err2) throw err;
+			e.reply('store_prices', JSON.parse(data));
+		});
 	});
-	e.reply('store_prices', 'Prices Stored Successfully!');
+});
+
+// get and read the stored prices file
+ipcMain.on('get_store_prices', (e, arg) => {
+	fs.readFile('dailyPrices.json', 'utf8', (err2, data) => {
+		if (err2) throw err;
+		e.reply('get_store_prices', JSON.parse(data));
+	});
 });
 
 // parse the price data to display on client side
