@@ -110,6 +110,7 @@ const Dashboard = () => {
 
 	const checkOnlineStatus = () => {
 		setOnlineStatus(navigator.onLine);
+		return !navigator.onLine ? setPriceType('') : null;
 	};
 
 	return (
