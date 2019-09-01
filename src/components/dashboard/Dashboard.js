@@ -11,6 +11,7 @@ const Dashboard = () => {
 	const [prices, setPrices] = useState([]);
 	const [priceType, setPriceType] = useState('');
 	const [active, setActive] = useState({});
+	const [onlineStatus, setOnlineStatus] = useState(navigator.onLine);
 
 	const [items, setItems] = useState([]);
 	const [isFetched, setIsFetched] = useState(false);
@@ -59,6 +60,7 @@ const Dashboard = () => {
 		setPrices(prices.filter(price => price._id !== data));
 	};
 
+	// only runs once
 	useEffect(() => {
 		// fetch table data
 		fetchData().then(res => {
@@ -66,6 +68,25 @@ const Dashboard = () => {
 			setIsFetched(true);
 		});
 	}, []);
+
+	// everytime the prices are changed, the stored prices file will also update
+	useEffect(() => {
+		storePrices();
+	}, [prices]);
+
+	useEffect(() => {
+		// event listener to check if there is internet connection
+		window.addEventListener('online', checkOnlineStatus);
+		window.addEventListener('offline', checkOnlineStatus);
+
+		checkOnlineStatus();
+
+		// remove event listeners to avoid memory leak
+		return () => {
+			window.removeEventListener('online', checkOnlineStatus);
+			window.removeEventListener('offline', checkOnlineStatus);
+		};
+	});
 
 	// calls server to get all the daily NYSE prices
 	const fetchData = () => {
@@ -77,11 +98,25 @@ const Dashboard = () => {
 		});
 	};
 
+	// calls the server to store the daily prices to a file
+	const storePrices = () => {
+		return new Promise((resolve, reject) => {
+			ipcRenderer.send('store_prices', prices);
+			ipcRenderer.on('store_prices', (e, arg) => {
+				resolve(arg);
+			});
+		});
+	};
+
+	const checkOnlineStatus = () => {
+		setOnlineStatus(navigator.onLine);
+	};
+
 	return (
 		<Fragment>
 			{isFetched ? (
 				<div className='bg-gray-200 h-screen flex flex-col'>
-					{/* <Offline /> */}
+					{!onlineStatus ? <Offline /> : null}
 
 					{priceType !== '' ? (
 						<PriceForm
@@ -94,8 +129,8 @@ const Dashboard = () => {
 						/>
 					) : null}
 
-					<Header add={() => setPriceType('add')} />
-					<Table prices={prices} edit={price => activeHandler(price)} active={active._id} />
+					<Header add={() => setPriceType('add')} online={onlineStatus} />
+					<Table prices={prices} edit={price => activeHandler(price)} active={active._id} online={onlineStatus} />
 					<Pagination
 						items={items}
 						pageCount={pageCount}

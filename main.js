@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const db = require('./controllers/connectDb');
 const price = require('./controllers/price.controller');
+const fs = require('fs');
 
 function createWindow() {
 	const isDev = true;
@@ -20,7 +21,6 @@ function createWindow() {
 	db.connect();
 
 	// load the index.html of the app.
-	console.log(__dirname);
 	isDev ? win.loadURL('http://localhost:3000/') : win.loadFile('./build/index.html');
 	win.focus();
 }
@@ -53,10 +53,17 @@ ipcMain.on('destroy', (e, arg) => {
 	});
 });
 
+// stores the daily prices to a file
+ipcMain.on('store_prices', (e, arg) => {
+	fs.writeFile('dailyPrices.json', JSON.stringify(arg.map(item => parsePrice(item))), err => {
+		if (err) throw err;
+	});
+	e.reply('store_prices', 'Prices Stored Successfully!');
+});
+
 // parse the price data to display on client side
 function parsePrice(price) {
 	return {
-		...price,
 		_id: price._id.toString(),
 		stock_symbol: price.stock_symbol.toString(),
 		stock_exchange: price.stock_exchange.toString(),

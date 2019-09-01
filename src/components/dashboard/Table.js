@@ -102,7 +102,7 @@ const Table = props => {
 			<div className='w-full p-5'>
 				<div className='table w-full shadow'>
 					{filteredPrices.map((item, index) => (
-						<TableItem item={item} key={index} edit={() => props.edit(item)} active={props.active} />
+						<TableItem item={item} key={index} edit={() => props.edit(item)} active={props.active} online={props.online} />
 					))}
 				</div>
 			</div>
