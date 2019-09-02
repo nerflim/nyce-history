@@ -13,27 +13,19 @@ const Dashboard = () => {
 	const [active, setActive] = useState({});
 	const [onlineStatus, setOnlineStatus] = useState(navigator.onLine);
 	const [offlinePrices, setOfflinePrices] = useState([]);
-
-	const [items, setItems] = useState([]);
 	const [isFetched, setIsFetched] = useState(false);
+
+	// for pagination
 	const [activePage, setActivePage] = useState(1);
-	const itemsPerPage = 10;
-	const pageCount = items.length / itemsPerPage;
+	const itemsPerPage = 100;
+	const pageCount = prices.length / itemsPerPage;
 
 	const prev = () => {
 		return activePage > 1 ? setActivePage(activePage - 1) : null;
 	};
 
-	const first = () => {
-		return setActivePage(1);
-	};
-
 	const next = () => {
 		return activePage < pageCount ? setActivePage(activePage + 1) : null;
-	};
-
-	const last = () => {
-		return setActivePage(pageCount);
 	};
 
 	// opens the form and edits the active price
@@ -160,12 +152,11 @@ const Dashboard = () => {
 					<Header add={() => setPriceType('add')} online={onlineStatus} />
 					<Table prices={onlineStatus ? prices : offlinePrices} edit={price => activeHandler(price)} active={active._id} online={onlineStatus} />
 					<Pagination
-						items={items}
+						items={prices}
 						pageCount={pageCount}
-						first={() => first()}
+						itemsPerPage={itemsPerPage}
 						prev={() => prev()}
 						next={() => next()}
-						last={() => last()}
 						setActive={e => setActivePage(e)}
 						active={activePage}
 					/>
