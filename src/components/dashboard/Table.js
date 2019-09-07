@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TableItem from './TableItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +7,13 @@ import moment from 'moment';
 const Table = props => {
 	const [order, setOrder] = useState(false); // true → asc, false → desc
 	const [orderBy, setOrderBy] = useState('date');
+	const [startItem, setStartItem] = useState((props.activePage - 1) * props.itemsPerPage);
+	const [lastItem, setLastItem] = useState(props.activePage * props.itemsPerPage - 1);
+
+	useEffect(() => {
+		setStartItem((props.activePage - 1) * props.itemsPerPage);
+		setLastItem(props.activePage * props.itemsPerPage - 1);
+	}, [props.activePage, props.itemsPerPage]);
 
 	const filteredPrices = props.prices.sort((a, b) => {
 		if (orderBy === 'date' && !order) {
@@ -101,9 +108,11 @@ const Table = props => {
 
 			<div className='w-full p-5'>
 				<div className='table w-full shadow'>
-					{filteredPrices.map((item, index) => (
-						<TableItem item={item} key={index} edit={() => props.edit(item)} active={props.active} online={props.online} />
-					))}
+					{filteredPrices
+						.filter((item, index) => index >= startItem && index <= lastItem)
+						.map((item, index) => (
+							<TableItem item={item} key={index} edit={() => props.edit(item)} active={props.active} online={props.online} />
+						))}
 				</div>
 			</div>
 		</div>

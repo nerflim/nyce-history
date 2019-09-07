@@ -179,6 +179,8 @@ const Dashboard = () => {
 						active={active._id}
 						online={onlineStatus}
 						isFetching={isFetching}
+						activePage={activePage}
+						itemsPerPage={itemsPerPage}
 					/>
 
 					<Pagination
