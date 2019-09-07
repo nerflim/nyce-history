@@ -101,6 +101,10 @@ const Dashboard = () => {
 		});
 	};
 
+	ipcRenderer.on('addPrice', () => {
+		setPriceType('add');
+	});
+
 	// calls the server to store the daily prices to a file
 	const storePrices = () => {
 		return new Promise((resolve, reject) => {

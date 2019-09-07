@@ -24,6 +24,27 @@ function createWindow() {
 	isDev ? win.loadURL('http://localhost:3000/') : win.loadFile('./build/index.html');
 	win.focus();
 
+	// menu
+	const template = [
+		{
+			label: 'File',
+			submenu: [
+				{
+					label: 'Add Price',
+					click: async () => {
+						win.webContents.send('addPrice');
+					}
+				},
+				{ type: 'separator' },
+				{ role: 'Quit' }
+			]
+		},
+		{
+			label: 'Help',
+			submenu: [{ label: 'How to use?' }, { type: 'separator' }, { label: 'About NYSE History' }]
+		}
+	];
+
 	// include devtools when development
 	isDev
 		? template.push({
@@ -46,18 +67,6 @@ function createWindow() {
 	const menu = Menu.buildFromTemplate(template);
 	Menu.setApplicationMenu(menu);
 }
-
-// menu
-const template = [
-	{
-		label: 'File',
-		submenu: [{ label: 'Add Price' }, { type: 'separator' }, { role: 'Quit' }]
-	},
-	{
-		label: 'Help',
-		submenu: [{ label: 'How to use?' }, { type: 'separator' }, { label: 'About NYSE History' }]
-	}
-];
 
 // gets all the daily price
 ipcMain.on('get', (e, arg) => {
