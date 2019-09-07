@@ -27,7 +27,7 @@ function createWindow() {
 
 // gets all the daily price
 ipcMain.on('get', (e, arg) => {
-	price.get().then(res => {
+	price.get(arg).then(res => {
 		e.reply('get', res.map(item => parsePrice(item)));
 	});
 });

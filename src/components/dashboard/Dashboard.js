@@ -14,6 +14,9 @@ const Dashboard = () => {
 	const [onlineStatus, setOnlineStatus] = useState(navigator.onLine);
 	const [offlinePrices, setOfflinePrices] = useState([]);
 	const [isFetched, setIsFetched] = useState(false);
+	const [isFetching, setIsFetching] = useState(false);
+	const [startDate, setStartDate] = useState(new Date('2010-01-01'));
+	const [endDate, setEndDate] = useState(new Date('2010-12-30'));
 
 	// for pagination
 	const [activePage, setActivePage] = useState(1);
@@ -78,10 +81,15 @@ const Dashboard = () => {
 		}
 	}, [prices]);
 
+	// automatically calls fetch data when the date is changed
+	useEffect(() => {
+		fetchData(startDate, endDate).then(res => setPrices(res));
+	}, [startDate, endDate]);
+
 	// calls server to get all the daily NYSE prices
-	const fetchData = () => {
+	const fetchData = (gte, lte) => {
 		return new Promise((resolve, reject) => {
-			ipcRenderer.send('get', null);
+			ipcRenderer.send('get', { gte, lte });
 			ipcRenderer.on('get', (event, arg) => {
 				resolve(arg);
 			});
@@ -112,7 +120,7 @@ const Dashboard = () => {
 		// check if online
 		// if online → fetch daily prices from the database
 		if (navigator.onLine) {
-			fetchData().then(res => {
+			fetchData(startDate, endDate).then(res => {
 				console.log('using the DB');
 				setPrices(res);
 				setIsFetched(true);
@@ -149,8 +157,23 @@ const Dashboard = () => {
 						/>
 					) : null}
 
-					<Header add={() => setPriceType('add')} online={onlineStatus} />
-					<Table prices={onlineStatus ? prices : offlinePrices} edit={price => activeHandler(price)} active={active._id} online={onlineStatus} />
+					<Header
+						add={() => setPriceType('add')}
+						online={onlineStatus}
+						startDate={startDate}
+						endDate={endDate}
+						startDateHandler={e => setStartDate(e)}
+						endDateHandler={e => setEndDate(e)}
+					/>
+
+					<Table
+						prices={onlineStatus ? prices : offlinePrices}
+						edit={price => activeHandler(price)}
+						active={active._id}
+						online={onlineStatus}
+						isFetching={isFetching}
+					/>
+
 					<Pagination
 						items={prices}
 						pageCount={pageCount}

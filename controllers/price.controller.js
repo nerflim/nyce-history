@@ -1,10 +1,12 @@
 let dailyPrice = require('../models/dailyPrice.model');
 
-function get() {
+function get(req) {
 	return dailyPrice
 		.find()
 		.lean()
-		.limit(100)
+		.where('date')
+		.gte(req.gte)
+		.lte(req.lte)
 		.sort({ date: 'desc' })
 		.then(prices => prices)
 		.catch(err => console.log('Error: ' + err));
