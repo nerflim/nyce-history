@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const db = require('./controllers/connectDb');
 const price = require('./controllers/price.controller');
 const fs = require('fs');
@@ -23,7 +23,39 @@ function createWindow() {
 	// load the index.html of the app.
 	isDev ? win.loadURL('http://localhost:3000/') : win.loadFile('./build/index.html');
 	win.focus();
+
+	isDev
+		? template.push({
+				label: 'View',
+				submenu: [
+					{ role: 'reload' },
+					{ role: 'forcereload' },
+					{ role: 'toggledevtools' },
+					{ type: 'separator' },
+					{ role: 'resetzoom' },
+					{ role: 'zoomin' },
+					{ role: 'zoomout' },
+					{ type: 'separator' },
+					{ role: 'togglefullscreen' }
+				]
+		  })
+		: null;
+
+	const menu = Menu.buildFromTemplate(template);
+	Menu.setApplicationMenu(menu);
 }
+
+// menu
+const template = [
+	{
+		label: 'File',
+		submenu: [{ label: 'Add Price' }, { type: 'separator' }, { role: 'Quit' }]
+	},
+	{
+		label: 'Help',
+		submenu: [{ label: 'How to use?' }, { type: 'separator' }, { label: 'About NYSE History' }]
+	}
+];
 
 // gets all the daily price
 ipcMain.on('get', (e, arg) => {
