@@ -24,6 +24,7 @@ function createWindow() {
 	isDev ? win.loadURL('http://localhost:3000/') : win.loadFile('./build/index.html');
 	win.focus();
 
+	// include devtools when development
 	isDev
 		? template.push({
 				label: 'View',
@@ -41,6 +42,7 @@ function createWindow() {
 		  })
 		: null;
 
+	// initialize menu template
 	const menu = Menu.buildFromTemplate(template);
 	Menu.setApplicationMenu(menu);
 }
