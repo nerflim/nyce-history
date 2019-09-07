@@ -11,16 +11,18 @@ const Header = props => {
 				<label className='text-xs'>Start: </label>
 				<input
 					type='date'
-					className='border-white bg-transparent border p-1 text-sm rounded ml-2 mr-3'
+					className={`border-white bg-transparent border p-1 text-sm rounded ml-2 mr-3 ${!navigator.onLine ? 'opacity-50 cursor-not-allowed' : ''}`}
 					value={moment(props.startDate).format('YYYY-MM-DD')}
 					onChange={e => props.startDateHandler(new Date(e.target.value))}
+					disabled={!navigator.onLine}
 				/>
 				<label className='text-xs'>End: </label>
 				<input
 					type='date'
-					className='border-white bg-transparent border p-1 text-sm rounded  ml-2'
+					className={`border-white bg-transparent border p-1 text-sm rounded ml-2 ${!navigator.onLine ? 'opacity-50 cursor-not-allowed' : ''}`}
 					value={moment(props.endDate).format('YYYY-MM-DD')}
 					onChange={e => props.endDateHandler(new Date(e.target.value))}
+					disabled={!navigator.onLine}
 				/>
 			</div>
 			<div className='ml-auto'>
