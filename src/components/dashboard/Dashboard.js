@@ -5,6 +5,7 @@ import Pagination from './Pagination';
 import Loader from './Loader';
 import Offline from './Offline';
 import PriceForm from './PriceForm';
+import TableLoader from './TableLoader';
 const { ipcRenderer } = window.require('electron');
 
 const Dashboard = () => {
@@ -16,7 +17,7 @@ const Dashboard = () => {
 	const [isFetched, setIsFetched] = useState(false);
 	const [isFetching, setIsFetching] = useState(false);
 	const [startDate, setStartDate] = useState(new Date('2010-01-01'));
-	const [endDate, setEndDate] = useState(new Date('2010-12-30'));
+	const [endDate, setEndDate] = useState(new Date('2010-12-31'));
 
 	// for pagination
 	const [activePage, setActivePage] = useState(1);
@@ -83,7 +84,11 @@ const Dashboard = () => {
 
 	// automatically calls fetch data when the date is changed
 	useEffect(() => {
-		fetchData(startDate, endDate).then(res => setPrices(res));
+		setIsFetching(true);
+		fetchData(startDate, endDate).then(res => {
+			setPrices(res);
+			setIsFetching(false);
+		});
 	}, [startDate, endDate]);
 
 	// calls server to get all the daily NYSE prices
@@ -156,6 +161,8 @@ const Dashboard = () => {
 							removePrice={data => removePrice(data)}
 						/>
 					) : null}
+
+					{isFetching ? <TableLoader /> : null}
 
 					<Header
 						add={() => setPriceType('add')}
