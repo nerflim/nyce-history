@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, shell } = require('electron');
 const db = require('./controllers/connectDb');
 const price = require('./controllers/price.controller');
 const fs = require('fs');
@@ -41,7 +41,14 @@ function createWindow() {
 		},
 		{
 			label: 'Help',
-			submenu: [{ label: 'How to use?' }, { type: 'separator' }, { label: 'About NYSE History' }]
+			submenu: [
+				{
+					label: 'How to use?',
+					click: async () => {
+						await shell.openExternal('https://jolly-perlman-e277e1.netlify.com/');
+					}
+				}
+			]
 		}
 	];
 
