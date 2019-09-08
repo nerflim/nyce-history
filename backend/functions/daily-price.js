@@ -1,4 +1,6 @@
-const connectDb = require('../connectDb');
+require('dotenv').config();
+const mongoose = require('mongoose');
+
 let dailyPrice = require('../models/dailyPrice.model');
 
 exports.handler = function(event, context, callback) {
@@ -15,10 +17,23 @@ exports.handler = function(event, context, callback) {
 		});
 	};
 
+	// connect to db
+	function connect() {
+		const uri = process.env.ATLAS_URI;
+		mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
+
+		const connection = mongoose.connection;
+		// returns true when connected
+		return new Promise((resolve, reject) => {
+			connection.once('open', () => {
+				resolve(true);
+			});
+		});
+	}
+
 	// Call DB
 	const getPrices = () => {
-		send(process.env.ATLAS_URI);
-		// connectDb.connect().then(res => (res ? send('Connected to the database...') : send('Cannot connect to the database...')));
+		connect().then(res => (res ? getPricesHandler() : send('Cannot connect to the database...')));
 	};
 
 	// call request
