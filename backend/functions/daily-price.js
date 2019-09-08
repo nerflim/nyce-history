@@ -21,7 +21,7 @@ exports.handler = function(event, context, callback) {
 	// connect to db
 	function connect() {
 		const uri = process.env.ATLAS_URI;
-		mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
+		mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, bufferCommands: false, bufferMaxEntries: 0 });
 
 		const connection = mongoose.connection;
 		// returns true when connected
@@ -39,11 +39,34 @@ exports.handler = function(event, context, callback) {
 
 	// call request
 	const getPricesHandler = () => {
-		dailyPrice
-			.find()
-			.limit(10)
-			.then(res => send(res))
-			.catch(err => send('Error: ' + err));
+		if (event.queryStringParameters.startdate !== undefined && event.queryStringParameters.enddate !== undefined) {
+			dailyPrice
+				.find()
+				.where('date')
+				.gte(event.queryStringParameters.startdate)
+				.lte(event.queryStringParameters.enddate)
+				.then(prices => send(prices))
+				.catch(err => send('Error: ' + err));
+		} else if (event.queryStringParameters.startdate !== undefined && event.queryStringParameters.enddate === undefined) {
+			dailyPrice
+				.find()
+				.where('date')
+				.gte(event.queryStringParameters.startdate)
+				.then(prices => send(prices))
+				.catch(err => send('Error: ' + err));
+		} else if (event.queryStringParameters.startdate === undefined && event.queryStringParameters.enddate !== undefined) {
+			dailyPrice
+				.find()
+				.where('date')
+				.lte(event.queryStringParameters.enddate)
+				.then(prices => send(prices))
+				.catch(err => send('Error: ' + err));
+		} else {
+			dailyPrice
+				.find()
+				.then(prices => send(prices))
+				.catch(err => send('Error: ' + err));
+		}
 	};
 
 	// make sure method is GET
