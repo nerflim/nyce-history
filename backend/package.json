@@ -4,7 +4,9 @@
 	"description": "",
 	"main": "server.js",
 	"scripts": {
-		"start": "nodemon server"
+		"start": "nodemon server",
+		"lambda-serve": "netlify-lambda serve functions",
+		"lambda-build": "netlify-lambda build functions"
 	},
 	"author": "Milfren John dela Vega",
 	"license": "ISC",
@@ -13,6 +15,7 @@
 		"dotenv": "^8.1.0",
 		"express": "^4.17.1",
 		"mongoose": "^5.6.11",
+		"netlify-lambda": "^1.6.3",
 		"nodemon": "^1.19.1"
 	}
 }
