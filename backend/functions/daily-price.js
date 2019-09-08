@@ -17,7 +17,8 @@ exports.handler = function(event, context, callback) {
 
 	// Call DB
 	const getPrices = () => {
-		connectDb.connect().then(res => (res ? send('Connected to the database...') : send('Cannot connect to the database...')));
+		send(process.env.ATLAS_URI);
+		// connectDb.connect().then(res => (res ? send('Connected to the database...') : send('Cannot connect to the database...')));
 	};
 
 	// call request
