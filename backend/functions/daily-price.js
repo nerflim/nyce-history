@@ -17,7 +17,7 @@ exports.handler = function(event, context, callback) {
 
 	// Call DB
 	const getPrices = () => {
-		connectDb.connect().then(res => (res ? getPricesHandler() : send('Cannot connect to the database...')));
+		connectDb.connect().then(res => (res ? send('Connected to the database...') : send('Cannot connect to the database...')));
 	};
 
 	// call request
@@ -31,7 +31,6 @@ exports.handler = function(event, context, callback) {
 
 	// make sure method is GET
 	if (event.httpMethod === 'GET') {
-		// getPrices();
-		send({ test: 'asdf' });
+		getPrices();
 	}
 };
