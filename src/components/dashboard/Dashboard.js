@@ -84,7 +84,10 @@ const Dashboard = () => {
 
 	// automatically calls fetch data when the date is changed
 	useEffect(() => {
-		setIsFetching(true);
+		if (isFetched) {
+			setIsFetching(true);
+		}
+
 		fetchData(startDate, endDate).then(res => {
 			setPrices(res);
 			setIsFetching(false);
@@ -101,9 +104,7 @@ const Dashboard = () => {
 		});
 	};
 
-	ipcRenderer.on('addPrice', () => {
-		setPriceType('add');
-	});
+	ipcRenderer.on('addPrice', () => (navigator.onLine ? setPriceType('add') : null));
 
 	// calls the server to store the daily prices to a file
 	const storePrices = () => {
@@ -129,11 +130,14 @@ const Dashboard = () => {
 		// check if online
 		// if online → fetch daily prices from the database
 		if (navigator.onLine) {
-			fetchData(startDate, endDate).then(res => {
-				console.log('using the DB');
-				setPrices(res);
-				setIsFetched(true);
-				setOnlineStatus(navigator.onLine);
+			ipcRenderer.send('connect-to-db', null);
+			ipcRenderer.on('connect-to-db', (e, arg) => {
+				fetchData(startDate, endDate).then(res => {
+					console.log('using the DB');
+					setPrices(res);
+					setIsFetched(true);
+					setOnlineStatus(navigator.onLine);
+				});
 			});
 		}
 		// if offline, get the stored daily prices

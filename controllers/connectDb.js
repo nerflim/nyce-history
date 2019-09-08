@@ -7,13 +7,15 @@ function connect() {
 	mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
 
 	const connection = mongoose.connection;
-	connection.once('open', () => {
-		console.log('MongoDB connected...');
+	return new Promise((resolve, reject) => {
+		try {
+			connection.once('open', () => {
+				resolve('MongoDB connected...');
+			});
+		} catch (err) {
+			reject(err);
+		}
 	});
 }
 
-function test() {
-	console.log('test');
-}
-
-module.exports = { connect, test };
+module.exports = { connect };

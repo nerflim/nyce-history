@@ -4,7 +4,7 @@ const price = require('./controllers/price.controller');
 const fs = require('fs');
 
 function createWindow() {
-	const isDev = true;
+	const isDev = false;
 
 	// Create the browser window.
 	let win = new BrowserWindow({
@@ -16,9 +16,6 @@ function createWindow() {
 			nodeIntegration: true
 		}
 	});
-
-	// connect to database
-	db.connect();
 
 	// load the index.html of the app.
 	isDev ? win.loadURL('http://localhost:3000/') : win.loadFile('./build/index.html');
@@ -119,6 +116,16 @@ ipcMain.on('get_store_prices', (e, arg) => {
 	fs.readFile('dailyPrices.json', 'utf8', (err2, data) => {
 		if (err2) throw err;
 		e.reply('get_store_prices', JSON.parse(data));
+	});
+});
+
+// connect to database
+ipcMain.on('connect-to-db', async (e, arg) => {
+	console.log('Connecting to MongoDB...');
+
+	await db.connect().then(res => {
+		console.log(res);
+		e.reply('connect-to-db', res);
 	});
 });
 
