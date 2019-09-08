@@ -11,6 +11,7 @@
 
 # production
 /build
+/release-builds
 
 # backend
 /backend/node_modules
