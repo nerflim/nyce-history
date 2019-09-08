@@ -1,9 +1,10 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-
 let dailyPrice = require('../models/dailyPrice.model');
 
 exports.handler = function(event, context, callback) {
+	context.callbackWaitsForEmptyEventLoop = false;
+
 	// Send user response
 	const send = body => {
 		callback(null, {
