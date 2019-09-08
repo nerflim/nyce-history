@@ -31,6 +31,7 @@ exports.handler = function(event, context, callback) {
 
 	// make sure method is GET
 	if (event.httpMethod === 'GET') {
-		getPrices();
+		// getPrices();
+		send({ test: 'asdf' });
 	}
 };
