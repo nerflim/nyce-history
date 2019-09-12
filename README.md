@@ -1,68 +1,72 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+### Dependencies
 
-In the project directory, you can run:
+_Make Sure Node.js is installed_
 
-### `npm start`
+Install dependencies
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+npm install
+```
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### Dev Setup
 
-### `npm test`
+Modify `main.js` and find `isDev` then set it to `true`
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Create .env file on root directory
 
-### `npm run build`
+```
+ATLAS_URI=[Insert MongoDB Atlas URI key here]
+```
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Next, run react development
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+```
+npm start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Then run electron
 
-### `npm run eject`
+```
+npm run electron
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### `Main Process`
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Main Process is handled by `main.js` file.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### `Renderer / Front-end`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Front-end is located at `src` folder.
 
-## Learn More
+### Build Setup
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Modify `main.js` and find `isDev` then set it to `false`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Next, run react build
 
-### Code Splitting
+```
+npm run build
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+Then build electron
 
-### Analyzing the Bundle Size
+```
+npm run build-electron
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+### API / Web Service
 
-### Making a Progressive Web App
+Folder is located at `backend`
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+### `NPM Scripts`
 
-### Advanced Configuration
+```
+npm run lambda-serve        : serving lambda functions in development
+npm run lambda-build        : build lambda functions - Netlify handles building the application no need to run.
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+### Application Usage
 
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+See [Application Documentation](https://jolly-perlman-e277e1.netlify.com/).
