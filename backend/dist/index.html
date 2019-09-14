@@ -4,9 +4,165 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
 		<title>NSYE History Documentation</title>
+
+		<style>
+			nav {
+				max-width: 300px;
+			}
+			.main-content {
+				margin-left: 300px;
+			}
+		</style>
 	</head>
 	<body>
-		<h1>NYSE History Documentation</h1>
+		<!-- left nav -->
+		<nav class="w-full h-full bg-gray-300 p-5 text-gray-700 fixed">
+			<h5 class="text-sm font-bold mb-3">Getting Started</h5>
+			<ul class="text-sm mb-5">
+				<li><a href="#usage" class="text-purple-800 hover:text-purple-500 font-medium">Usage</a></li>
+				<li><a href="#add-price" class="text-purple-800 hover:text-purple-500 font-medium">Add Price</a></li>
+				<li><a href="#edit-price" class="text-purple-800 hover:text-purple-500 font-medium">Edit Price</a></li>
+				<li><a href="#remove-price" class="text-purple-800 hover:text-purple-500 font-medium">Remove Price</a></li>
+				<li><a href="#dates" class="text-purple-800 hover:text-purple-500 font-medium">Selecting Dates</a></li>
+				<li><a href="#sort" class="text-purple-800 hover:text-purple-500 font-medium">Sort</a></li>
+			</ul>
+			<h5 class="text-sm font-bold mb-3">API / Web Service</h5>
+			<ul class="text-sm mb-5">
+				<li><a href="#api" class="text-purple-800 hover:text-purple-500 font-medium">Usage</a></li>
+			</ul>
+		</nav>
+
+		<!-- main content -->
+		<div class="main-content">
+			<header class="w-full bg-purple-800 text-white p-3 shadow">
+				<h1 class="text-2xl font-medium">NYSE History Documentation</h1>
+			</header>
+
+			<section class="w-full p-5 relative">
+				<h3 class="text-xl font-bold">Getting Started</h3>
+				<div id="usage" class="py-8">
+					<h4 class="text-lg font-medium mb-2">Usage</h4>
+					<p class="mb-3">Welcome to NYSE History!</p>
+					<p class="mb-3 text-center text-xs text-gray-700">Download the application below.</p>
+					<p class="text-center my-5">
+						<a
+							href="https://drive.google.com/file/d/1FyTQytfp5TELEMz1WvWN7ODn-fS2XVQs/view"
+							target="_blank"
+							class="border border-purple-800 hover:bg-purple-800 hover:text-white p-3 rounded shadow text-purple-800"
+						>
+							Download
+						</a>
+					</p>
+					<p class="mb-3 text-center text-xs text-gray-700">Unzip the downloaded file and run the application.</p>
+					<p class="font-italic text-red-700 text-xs">
+						<strong>Note for the trainer:</strong> In this assessment I did not create an installer file to avoid dumping unecessary files to the one
+						who will use the application. I can create an installer file but to save the trainer some time, I only made a portable application that
+						can run without installing.
+					</p>
+					<div class="text-center flex justify-center w-full my-3">
+						<img src="./assets/img/1.jpg" class="w-3/4" />
+					</div>
+				</div>
+
+				<hr />
+
+				<div id="add-price" class="py-8">
+					<h4 class="text-lg font-medium mb-2">Add Price</h4>
+					<p><strong>Step 1.</strong> On the upper right hand corner of the application, click the button <strong>"Add Price"</strong>.</p>
+					<div class="text-center flex justify-center w-full my-3">
+						<img src="./assets/img/2.jpg" class="w-3/4" />
+					</div>
+
+					<p><strong>Step 2.</strong> Fill in the form, then click submit.</p>
+					<div class="text-center flex justify-center w-full my-3">
+						<img src="./assets/img/3.jpg" class="w-3/4" />
+					</div>
+				</div>
+
+				<hr />
+
+				<div id="edit-price" class="py-8">
+					<h4 class="text-lg font-medium mb-2">Edit Price</h4>
+					<p>Select the data you want. For this example we will be selecting the first data. Click <strong>"Edit"</strong> on the right column.</p>
+					<div class="text-center flex justify-center w-full my-3">
+						<img src="./assets/img/4.jpg" class="w-3/4" />
+					</div>
+					<p>Change the data you want to edit, then click submit.</p>
+					<div class="text-center flex justify-center w-full my-3">
+						<img src="./assets/img/5.jpg" class="w-3/4" />
+					</div>
+				</div>
+
+				<hr />
+
+				<div id="remove-price" class="py-8">
+					<h4 class="text-lg font-medium mb-2">Remove Price</h4>
+					<p>
+						Removing price is in the <strong>bottom left</strong> part of the Edit form. Click "Remove price" and a confirmation will show up for you
+						to permanently remove the price.
+					</p>
+					<div class="text-center flex justify-center w-full my-3">
+						<img src="./assets/img/5.jpg" class="w-3/4" />
+					</div>
+				</div>
+
+				<hr />
+
+				<div id="dates" class="py-8">
+					<h4 class="text-lg font-medium mb-2">Selecting Dates</h4>
+					<p class="mb-3">
+						The number of prices given on the application are handled by the Start Date and End Date on the upper left corner of the application. This
+						is to avoid <strong>data-overloading</strong> as there are so many prices inside the database.
+					</p>
+					<p class="mb-3">
+						By default, the selected date is from the start of the year <strong>2010</strong> and ends in the last day of <strong>2010</strong>.
+					</p>
+					<p>The application will automatically fetch a new data from the database right after selecting the desired date.</p>
+					<div class="text-center flex justify-center w-full my-3">
+						<img src="./assets/img/6.jpg" class="w-3/4" />
+					</div>
+				</div>
+
+				<hr />
+
+				<div id="sort" class="py-8">
+					<h4 class="text-lg font-medium mb-2">Sorting</h4>
+					<p class="mb-3">
+						By default the current sorting of the prices is in <strong>descending order</strong> from the <strong>Date</strong> column.
+					</p>
+					<p>Select the section you want to sort and it will automatically sort for you.</p>
+					<div class="text-center flex justify-center w-full my-3">
+						<img src="./assets/img/7.jpg" class="w-3/4" />
+					</div>
+				</div>
+
+				<hr />
+
+				<h3 class="text-xl font-bold mt-8">API / Web Service</h3>
+				<div id="api" class="py-8">
+					<h4 class="text-lg font-medium mb-2">Usage</h4>
+					<code class="bg-gray-200 p-3 rounded block text-xs mb-3">https://jolly-perlman-e277e1.netlify.com/.netlify/functions/daily-price</code>
+					<h4 class="text-lg font-medium mb-2 mt-5">With Dates</h4>
+					<p class="mb-2">Specifying a <strong>Start Date</strong></p>
+					<code class="bg-gray-200 p-3 rounded block text-xs mb-3">
+						https://jolly-perlman-e277e1.netlify.com/.netlify/functions/daily-price?startdate=[yyyy-mm-dd]
+					</code>
+					<p class="mb-2 text-sm">example:</p>
+					<code class="bg-gray-200 p-3 rounded block text-xs text-red-700 mb-3">
+						https://jolly-perlman-e277e1.netlify.com/.netlify/functions/daily-price?startdate=2010-01-01
+					</code>
+					<p class="mb-2">Specifying a <strong>Start Date</strong> with <strong>End Date</strong></p>
+					<code class="bg-gray-200 p-3 rounded block text-xs mb-3">
+						https://jolly-perlman-e277e1.netlify.com/.netlify/functions/daily-price?startdate=[yyyy-mm-dd]&enddate=[yyyy-mm-dd]
+					</code>
+					<p class="mb-2 text-sm">example:</p>
+					<code class="bg-gray-200 p-3 rounded block text-xs text-red-700 mb-3">
+						https://jolly-perlman-e277e1.netlify.com/.netlify/functions/daily-price?startdate=2010-01-01&enddate=2010-12-01
+					</code>
+				</div>
+			</section>
+		</div>
 	</body>
 </html>
