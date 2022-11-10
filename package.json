@@ -44,7 +44,7 @@
 		]
 	},
 	"devDependencies": {
-		"electron": "^6.0.3",
+		"electron": "^18.3.7",
 		"electron-packager": "^14.0.5"
 	}
 }
